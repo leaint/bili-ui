@@ -1,0 +1,150 @@
+{
+    "code": 0,
+    "message": "0",
+    "ttl": 1,
+    "data": {
+        "list": {
+            "tlist": {
+                "181": {
+                    "tid": 181,
+                    "count": 1,
+                    "name": "影视"
+                },
+                "202": {
+                    "tid": 202,
+                    "count": 1,
+                    "name": "资讯"
+                },
+                "211": {
+                    "tid": 211,
+                    "count": 1,
+                    "name": "美食"
+                },
+                "217": {
+                    "tid": 217,
+                    "count": 6,
+                    "name": "动物圈"
+                },
+                "36": {
+                    "tid": 36,
+                    "count": 275,
+                    "name": "知识"
+                }
+            },
+            "vlist": [
+                {
+                    "comment": 4320,
+                    "typeid": 201,
+                    "play": 2868311,
+                    "pic": "http://i1.hdslb.com/bfs/archive/027ff8f2e61c94051027ef8fd8b2027089d0c294.jpg",
+                    "subtitle": "",
+                    "description": "",
+                    "copyright": "1",
+                    "title": "【亮记生物鉴定】网络热传生物鉴定47",
+                    "review": 0,
+                    "author": "无穷小亮的科普日常",
+                    "mid": 14804670,
+                    "created": 1677494316,
+                    "length": "08:14",
+                    "video_review": 16745,
+                    "aid": 525211361,
+                    "bvid": "BV1yM411j7NG",
+                    "hide_click": false,
+                    "is_pay": 0,
+                    "is_union_video": 0,
+                    "is_steins_gate": 0,
+                    "is_live_playback": 0,
+                    "meta": null,
+                    "is_avoided": 0,
+                    "attribute": 0
+                },
+                {
+                    "comment": 1536,
+                    "typeid": 201,
+                    "play": 769433,
+                    "pic": "http://i2.hdslb.com/bfs/archive/cde1f1f066dfb01a4bcb18f9df4404c7d985e021.jpg",
+                    "subtitle": "",
+                    "description": "2022年8月，中科院植物所、上海辰山植物园、野性中国组成了一支科考队，来到西藏察隅县的原始森林，攀登、采集、测量这棵被认定为“中国最高树”的云南黄果冷杉，我们把这一切全程记录了下来。",
+                    "copyright": "1",
+                    "title": "史无前例！我们爬上了中国最高树",
+                    "review": 0,
+                    "author": "中国国家地理",
+                    "mid": 2000819931,
+                    "created": 1676970000,
+                    "length": "38:38",
+                    "video_review": 5803,
+                    "aid": 224708131,
+                    "bvid": "BV19b411X7GZ",
+                    "hide_click": false,
+                    "is_pay": 0,
+                    "is_union_video": 1,
+                    "is_steins_gate": 0,
+                    "is_live_playback": 0,
+                    "meta": null,
+                    "is_avoided": 0,
+                    "attribute": 0
+                },
+                {
+                    "comment": 1512,
+                    "typeid": 201,
+                    "play": 1008805,
+                    "pic": "http://i0.hdslb.com/bfs/archive/dd391e42b4cc1720abc72a41abb8ea074a399306.png",
+                    "subtitle": "",
+                    "description": "从西部世界屋脊到南国海岛雨林，跟Columbia一起探索自然更多可能。",
+                    "copyright": "1",
+                    "title": "普达措国家公园野花野果",
+                    "review": 0,
+                    "author": "无穷小亮的科普日常",
+                    "mid": 14804670,
+                    "created": 1665289951,
+                    "length": "08:41",
+                    "video_review": 5588,
+                    "aid": 986490522,
+                    "bvid": "BV1v44y1f7KR",
+                    "hide_click": false,
+                    "is_pay": 0,
+                    "is_union_video": 0,
+                    "is_steins_gate": 0,
+                    "is_live_playback": 0,
+                    "meta": {
+                        "id": 732159,
+                        "title": "远方博物学",
+                        "cover": "https://archive.biliimg.com/bfs/archive/3501be2e93220e54284b32ff23934bc61c15eac8.jpg",
+                        "mid": 14804670,
+                        "intro": "",
+                        "sign_state": 0,
+                        "attribute": 140,
+                        "stat": {
+                            "season_id": 732159,
+                            "view": 78392819,
+                            "danmaku": 478859,
+                            "reply": 140683,
+                            "favorite": 336374,
+                            "coin": 452123,
+                            "share": 164597,
+                            "like": 5410519
+                        },
+                        "ep_count": 39,
+                        "first_aid": 97318483,
+                        "ptime": 1670925233,
+                        "ep_num": 0
+                    },
+                    "is_avoided": 0,
+                    "attribute": 0
+                }
+            ]
+        },
+        "page": {
+            "pn": 1,
+            "ps": 3,
+            "count": 284
+        },
+        "episodic_button": {
+            "text": "播放全部",
+            "uri": "//www.bilibili.com/medialist/play/14804670?from=space"
+        },
+        "is_risk": false,
+        "gaia_res_type": 0,
+        "gaia_data": null
+    }
+}

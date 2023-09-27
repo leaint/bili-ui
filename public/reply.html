@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- <script async src="./assets/petite-vue.iife.js"></script> -->
+	<script async src="https://unpkg.com/petite-vue@0.4.1/dist/petite-vue.iife.js"></script>
+	<script>
+		const uid = localStorage.getItem("uid") || "";
+		const cookie = localStorage.getItem("cookie") || "";
+		const myHeaders = new Headers([
+			["X-Cookie", cookie],
+			["X-Referer", "https://www.bilibili.com"],
+			["X-Origin", "https://www.bilibili.com"],
+		]);
+
+		const apiPrefix = localStorage.getItem("apiprefix") || "http://127.22/";
+
+		const apiFetch = async (url) => {
+			const res = await fetch(apiPrefix + url, { headers: myHeaders, });
+			return res.json();
+		}
+
+		const u = new URL(location.href);
+		const id = u.searchParams.get("id");
+
+		function fetchReplyData(id, mode) {
+			return apiFetch(`https://api.bilibili.com/x/v2/reply/main?mode=${mode}&next=0&plat=1&seek_rpid=&type=1&oid=${id}`)
+				.then((e) => {
+					return e.data.replies.map((i) => {
+						return {
+							...replyMapper(i),
+							replies: i.replies?.map(replyMapper) || [],
+						};
+					})
+				})
+		}
+
+		const REPLY_MODE = {
+			NEW: 2,
+			HOT: 3
+		}
+
+		const initData = fetchReplyData(id, REPLY_MODE.HOT);
+
+		function timeToStr(d) {
+			const diff = Math.floor(Date.now() / 1000 - d);
+
+			let s = "刚刚";
+			if (diff < 60) {
+				return s;
+			} else if (diff < 3600) {
+				s = Math.floor(diff / 60) + "分钟前";
+			} else if (diff < 86400) {
+				s = Math.floor(diff / 3600) + "小时前";
+			} else {
+				const a = new Date(d * 1000);
+				let m = "0" + (a.getMonth() + 1);
+				m = m.slice(-2);
+				let day = "0" + a.getDate();
+				day = day.slice(-2);
+				s = a.getFullYear() + "-" + m + "-" + day;
+			}
+
+			return s;
+		}
+
+		function replyMapper(i) {
+			return {
+				message: i.content.message,
+				like: i.like,
+				uname: i.member.uname,
+				ctime_str: timeToStr(i.ctime),
+			}
+		}
+
+		const obj = {
+			REPLY_MODE,
+			_replyMode: REPLY_MODE.HOT,
+			replyData: [],
+			done: true,
+
+			get replyMode() {
+				return this._replyMode;
+			},
+			set replyMode(v) {
+				if (v !== this._replyMode) {
+
+					fetchReplyData(id, v)
+						.then((data) => {
+							this.replyData = data;
+						})
+					this._replyMode = v;
+				}
+			},
+
+			onmounted() {
+				let waitTimer = setTimeout(() => {
+					this.done = false;
+					waitTimer = -1;
+				}, 2000);
+				initData.then((data) => {
+					this.replyData = data;
+				})
+					.finally(() => {
+						if (waitTimer !== -1) {
+							clearTimeout(waitTimer)
+						}
+						this.done = true;
+					})
+			}
+		}
+		window.onload = () => {
+			const app = PetiteVue.createApp(obj);
+			app.mount("#app");
+			// setTimeout(() => , 0);
+
+		};
+	</script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+
+		.rootreply {
+			margin-left: 1em;
+		}
+
+		.subreply {
+			padding-left: 0.5em;
+			margin-left: 2em;
+			margin-top: 0.5em;
+			border-left: 1px solid gray;
+		}
+
+		.replybox {
+
+			margin-top: 1em;
+			border-left: 1px solid gray;
+			border-bottom: 1px gray;
+			padding-bottom: 7px;
+			border-bottom-style: dashed;
+		}
+
+		.header {
+			font-size: small;
+			color: #424242;
+			margin-bottom: 3px;
+		}
+
+		.header>span {
+			padding-right: 0.5em;
+		}
+
+		.header>span.up::before {
+			content: "⇧";
+		}
+
+		.message {
+			margin-left: 2em;
+		}
+
+		#modbox {}
+	</style>
+</head>
+
+<body>
+	<div id="app" @vue:mounted="onmounted" v-cloak>
+		<div id="modebox">
+			<label title="最新">
+				<input type="radio" v-model="replyMode" :value="REPLY_MODE.NEW" />最新
+			</label>
+			<label title="最热">
+				<input type="radio" v-model="replyMode" :value="REPLY_MODE.HOT" />最热
+			</label>
+		</div>
+		<div v-if="!done">
+			<progress></progress>
+		</div>
+		<div v-for="(item, index) in replyData" :keys="index" class="replybox">
+			<div class="rootreply">
+				<div class="header">
+					<span class="up">{{item.like}}</span><span class="uname">{{item.uname}}</span><span
+						class="ctime">{{item.ctime_str}}</span>
+				</div>
+				<div class="message">
+					{{item.message}}
+				</div>
+			</div>
+
+			<div v-for="(subitem, _) in item.replies" class="subreply">
+				<div class="header"><span class="up">{{subitem.like}}</span><span
+						class="uname">{{subitem.uname}}</span><span class="ctime">{{item.ctime_str}}</span></div>
+				<div class="message">
+					{{subitem.message}}
+				</div>
+			</div>
+
+		</div>
+	</div>
+	</div>
+
+</body>
+
+</html>

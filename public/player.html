@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<meta name="viewport" content="width=device-width,height=device-height, initial-scale=1.0">
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+	</style>
+	<!-- <script async src="./assets/petite-vue.iife.js"></script> -->
+	<script async src="https://unpkg.com/petite-vue@0.4.1/dist/petite-vue.iife.js"></script>
+	<script async src="./lib/mp4-inspector.js"></script>
+	<script async src="main.js"></script>
+	<style>
+		:root {
+			--light-white: #cecece;
+			--light-gray: #919191;
+			--dark-color: #424245;
+		}
+
+		a {
+			text-decoration: none;
+		}
+
+		@media (hover: hover) {
+			.autohide {
+				opacity: 0;
+				transition-duration: 0.32s;
+				/*transition-delay: 0.8s;*/
+			}
+
+			.autohide:hover {
+				opacity: 1;
+			}
+		}
+
+		video:focus-visible {
+			outline: none;
+		}
+
+		.cur {
+			/*color: rgb(201 201 201);*/
+			color: var(--light-white);
+			background-color: rgb(15 30 36);
+		}
+
+		li {
+			cursor: pointer;
+		}
+
+		.plist {
+			user-select: none;
+		}
+
+		.plist li {
+			display: inline-block;
+			padding: 5px 8px;
+		}
+
+		.elist li {
+			padding: 3px 3px 3px 5px;
+		}
+
+		li:hover {
+			background-color: rgb(78 58 33);
+		}
+
+		li.extra:hover {
+			background-color: transparent;
+		}
+
+		.disabled {
+			/*color: #4a3d3d;*/
+			color: var(--dark-color);
+		}
+
+		.enabled {
+			/*color: #d5c1c1;*/
+			color: var(--light-white);
+		}
+
+		.videoplayer {
+			padding-top: 3em;
+			color: #d5c1c1;
+			margin: 0 auto;
+			max-width: fit-content;
+		}
+
+		video {
+			max-width: 100%;
+		}
+
+		.title {
+			/*color: rgb(201 201 201);*/
+			color: var(--light-white);
+			font-weight: normal;
+			max-width: fit-content;
+			margin-block-end: 0.5em;
+		}
+
+		.title a {
+			color: inherit;
+		}
+
+		.show {
+			visibility: visible;
+		}
+
+		.hide {
+			visibility: hidden;
+		}
+
+		.desc {
+			font-size: 0.9em;
+			max-width: fit-content;
+			margin-bottom: 5px;
+			overflow-wrap: anywhere;
+			max-height: 2.8em;
+			overflow-y: auto;
+		}
+
+		.blackscrollbar:hover::-webkit-scrollbar-thumb {
+			background-color: black;
+		}
+
+		.blackscrollbar:hover::-webkit-scrollbar {
+			background-color: #3a3a3a;
+		}
+
+		.blackscrollbar::-webkit-scrollbar-thumb {
+			background-color: rgba(0, 0, 0, 0);
+		}
+
+		.blackscrollbar::-webkit-scrollbar {
+			background-color: rgba(0, 0, 0, 0);
+			width: 5px;
+		}
+
+		.ebox {
+			max-height: 20em;
+			overflow-y: auto;
+			position: relative;
+		}
+
+		.author {
+			font-size: 0.9em;
+			margin-bottom: 0.5em;
+			/*color: #858e96;*/
+			color: var(--light-gray);
+		}
+
+		div.author a {
+			/*color: #858e96;*/
+			color: var(--light-gray);
+		}
+
+		.author input {
+			/*color: #858e96;*/
+			color: var(--light-gray);
+			background-color: transparent;
+			border: none;
+		}
+
+		.plist input {
+			/*color: #858e96;*/
+			color: var(--light-gray);
+			background-color: transparent;
+		}
+
+		input[type="range"] {
+			height: 20px;
+			-webkit-appearance: none;
+			margin: 10px 0;
+			background-color: transparent;
+		}
+
+		input[type="range"]:focus {
+			outline: none;
+		}
+
+		input[type="range"]::-webkit-slider-runnable-track {
+			width: 100%;
+			height: 5px;
+			box-shadow: 0px;
+			background: #051927;
+			border-radius: 1px;
+			border: 0px;
+		}
+
+		input[type="range"]::-webkit-slider-thumb {
+			border: 0px;
+			height: 14px;
+			width: 14px;
+			border-radius: 14px;
+			background: #39536b;
+			-webkit-appearance: none;
+			margin-top: -4.5px;
+		}
+
+		input[type="range"]::-moz-range-track {
+			width: 100%;
+			height: 5px;
+			box-shadow: 0px 0px 0px #000000;
+			background: #0d3854;
+			border-radius: 1px;
+			border: 0px solid #000000;
+		}
+
+		input[type="range"]::-moz-range-thumb {
+			box-shadow: 0px 0px 0px #000000;
+			border: 0px solid #2497e3;
+			height: 14px;
+			width: 14px;
+			border-radius: 14px;
+			background: #6583a1;
+		}
+
+		.duration {
+			right: 0;
+			position: absolute;
+		}
+
+		.elist li div {
+			padding-right: 3.1em;
+		}
+
+		.blackbg,
+		body {
+			/* background-image: linear-gradient(180deg, #101012 3%, #242429 85%); */
+			background-color: #101012;
+			transition: none;
+			overflow-y: overlay;
+		}
+
+		div#playerbox.webfull {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			z-index: 10;
+			background-color: black;
+		}
+
+		.webfull video {
+			width: 100vw !important;
+			height: 100vh !important;
+		}
+
+		.webfull .exitfull {
+
+			top: 20px;
+			right: 20px;
+		}
+
+		.exitfull {
+
+			position: fixed;
+			top: -100px;
+			right: -100px;
+			font-size: 2em;
+			cursor: pointer;
+		}
+
+		.errormsg {
+			position: fixed;
+			top: 1%;
+			z-index: 555;
+			/* margin: auto; */
+			left: calc(50% - 10em);
+			min-width: 20em;
+			/* right: auto; */
+			padding: 3px 2em;
+			min-height: 1em;
+			color: white;
+			background-color: #2196f3;
+			border-radius: 5px;
+			text-align: center;
+		}
+
+		#playerbox {
+			position: relative;
+		}
+
+		#videoshot {
+			position: absolute;
+			left: -1000px;
+			bottom: 60px;
+			text-align: center;
+			background-color: black;
+		}
+
+		#videoshot #shotimg {
+			width: 160px;
+			height: 90px;
+			background-repeat: no-repeat;
+			background-attachment: scroll;
+		}
+
+		#commentbox {
+			max-width: 400px;
+			min-height: 5em;
+		}
+
+		.rootreply {
+			margin-left: 1em;
+		}
+
+		.subreply {
+			padding-left: 0.5em;
+			margin-left: 2em;
+			margin-top: 0.5em;
+			border-left: 1px solid #616161;
+		}
+
+		.replybox {
+
+			margin-top: 1em;
+			border-left: 1px solid #616161;
+			border-bottom: 1px #616161;
+			padding-bottom: 7px;
+			border-bottom-style: dashed;
+		}
+
+		.header {
+			font-size: small;
+			/* color: #424242; */
+			margin-bottom: 3px;
+		}
+
+		.header>span {
+			padding-right: 0.5em;
+		}
+
+		.header>span.up::before {
+			content: "⇧";
+		}
+
+		.message {
+			margin-left: 2em;
+			color: white;
+			line-height: 1.5em;
+		}
+
+		#modebox {
+			margin: 5px 0 0 5px;
+		}
+
+		summary {
+			cursor: default;
+			user-select: none;
+		}
+	</style>
+</head>
+
+<body class="blackscrollbar">
+	<div id="app" v-scope @vue:mounted="setupRouting" @vue:unmounted="onUnmounted" v-cloak>
+
+		<div class="videoplayer" v-show="firstshow">
+			<h3 class="title">
+				<span>{{ title }}</span>
+				<span style="cursor:pointer;" title="在Bilibili中打开" @click="openbili">---📎️---</span>
+			</h3>
+			<div class="author">
+				<a v-if="dataMode === 0" target="_blank" :href="'/space?mid=' + owner.mid">{{owner.name}}</a>
+				<span> · {{ pubdate }} ·</span>
+				<a target="_blank" :href="'reply.html?id=' + aid">☁ ·</a>
+				<span>
+					<input type="text" :value="bvid" />
+				</span>
+			</div>
+			<div class="errormsg" v-show="errormsg.length > 0">{{ errormsg }}</div>
+			<div id="playerbox" :class="webfull?'webfull':''">
+				<video @play="onplay" @pause="onpause" @seeking="onseeking" @loadedmetadata="initvolume"
+					@volumechange="updatevolume" @ended="nexturl(0)" v-show="!auonly" preload="auto"
+					:controls="canplay"></video>
+				<audio preload="auto" @volumechange="updatevolume" @loadeddata="autop" @ended="nexturl(1)"
+					:controls="auonly"></audio>
+				<div id="exitfull" class="exitfull" @click="webfull=false">✖️</div>
+				<div id="videoshot">
+					<div id="shotimg"></div>
+					<span>{{hovertime}}</span>
+				</div>
+			</div>
+			<div class="desc blackscrollbar">{{ desc }}</div>
+			<ul class="plist autohide">
+				<li v-for="(item, index) in vcodecs" @click="commitOpt(OPT.QUALITYCHANGE, index)"
+					:class="index === curQuality ? 'cur' : ''" :key="index">{{ codecs[item] }}</li>
+				<li class="extra">
+					<input type="range" min="0" max="1" step="0.1" v-model="volume" />
+				</li>
+				<li class="extra">
+					<label title="Star?" :class="star ? 'enabled' : 'disabled'">
+						<input hidden type="checkbox" v-model="star" />🟉
+					</label>
+					<label title="Need subtitle?" :class="ensub ? 'enabled' : 'disabled'">
+						<input hidden type="checkbox" v-model="ensub" @change="loadvtt" />SUB
+					</label>
+					<label title="Audio only?" :class="auonly ? 'enabled' : 'disabled'">
+						<input hidden type="checkbox" v-model="auonly" />A
+					</label>
+					<label title="DASH or FLV?" :class="dashmode ? 'enabled' : 'disabled'">
+						<input hidden type="checkbox" v-model="dashmode" />D
+					</label>
+					<label title="Full window view?" :class="dashmode ? 'enabled' : 'disabled'">
+						<input hidden type="checkbox" v-model="webfull" />↗️
+					</label>
+				</li>
+				<li class="extra">
+					<label :class="store.playmode === PLAYMODE.SINGLE ? 'enabled' : 'disabled'">
+						<input hidden type="radio" v-model="store.playmode" :value="PLAYMODE.SINGLE" />S
+					</label>
+					<label :class="store.playmode === PLAYMODE.ALL ? 'enabled' : 'disabled'">
+						<input hidden type="radio" v-model="store.playmode" :value="PLAYMODE.ALL" />A
+					</label>
+					<label :class="store.playmode === PLAYMODE.ROUND ? 'enabled' : 'disabled'">
+						<input hidden type="radio" v-model="store.playmode" :value="PLAYMODE.ROUND" />R
+					</label>
+					<span @click="scrollto">&nbsp;&nbsp;{{cur+1}}/{{pages.length}}</span>
+				</li>
+				<li>
+					<div>
+						<input type="text" size="4" v-model="peekstart_v" ><label>Now<input type="button" hidden @click="get_cur(0)" ></label><input type="checkbox" id="peedstart" v-model="enable_peek_s">
+					</div>
+					<div>
+						<input type="text" size="4" v-model="peekend_v" ><label>Now<input type="button" hidden @click="get_cur(1)"></label><input type="checkbox" id="peedend" v-model="enable_peek_e">
+					</div>
+				</li>
+			</ul>
+			<div>
+				<ol class="elist ebox blackscrollbar" id="playlist">
+					<li v-for="(item, index) in pages" :key="index" :data-index="index">{{ dataMode === 0
+						? item.part : mapEPTitle(item) }}<span class="duration">{{ item.duration }}</span>
+					</li>
+				</ol>
+				<div id="extralist">
+					<details v-for="(item,pindex) in sections">
+						<summary>{{item.title}}</summary>
+						<ol class="elist ebox blackscrollbar">
+							<li v-for="(subitem, index) in item.episodes" :key="index" :data-pindex="pindex"
+								:data-index="index">
+								{{[subitem.title, subitem.long_title, subitem.badge].join(' ') }}
+							</li>
+						</ol>
+					</details>
+				</div>
+			</div>
+			<details @toggle="showComment">
+				<summary>评论</summary>
+				<div id="commentbox">
+					<div id="modebox">
+						<label title="最新" :class="replyMode === REPLY_MODE.NEW ? 'enabled' : 'disabled'">
+							<input hidden type="radio" v-model="replyMode" :value="REPLY_MODE.NEW" />最新
+						</label>
+						<label title="最热" :class="replyMode === REPLY_MODE.HOT ? 'enabled' : 'disabled'">
+							<input hidden type="radio" v-model="replyMode" :value="REPLY_MODE.HOT" />最热
+						</label>
+					</div>
+
+					<div v-for="(item, index) in replyData" :keys="index" class="replybox">
+						<div class="rootreply">
+							<div class="header">
+								<span class="up">{{item.like}}</span><span class="uname">{{item.uname}}</span><span
+									class="ctime">{{item.ctime_str}}</span>
+							</div>
+							<div class="message">
+								{{item.message}}
+							</div>
+						</div>
+
+						<div v-for="(subitem, _) in item.replies" class="subreply">
+							<div class="header"><span class="up">{{subitem.like}}</span><span
+									class="uname">{{subitem.uname}}</span><span class="ctime">{{item.ctime_str}}</span>
+							</div>
+							<div class="message">
+								{{subitem.message}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</details>
+		</div>
+
+	</div>
+</body>
+
+</html>
