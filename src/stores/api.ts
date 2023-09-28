@@ -10,7 +10,7 @@ export class Api {
       referrerPolicy: "no-referrer",
     });
 
-    return { cookie: e.headers.get("x-cookie") };
+    return { cookie: e.headers.get("x-cookie") || document.cookie };
   }
   async getNavInfo() {
     const e = await fetch(this.defaultStore.apiprefix + ApiUrl.NavInfo, {
